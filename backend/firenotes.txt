@@ -1,0 +1,130 @@
+ACCESS INFORMATION:
+ for users with the name "Mayank" from a Firestore database,
+ you would typically execute a query to filter the users based on their name. 
+ Here's how you can do it using the Firestore JavaScript SDK:
+ const { Firestore } = require('@google-cloud/firestore');
+
+// Initialize Firestore
+const firestore = new Firestore();
+
+// Reference to the users collection
+const usersCollection = firestore.collection('users');
+
+// Define the query to filter users with the name "Mayank"
+const query = usersCollection.where('name', '==', 'Mayank');
+
+// Execute the query
+query.get()
+  .then(snapshot => {
+    if (snapshot.empty) {
+      console.log('No users found with the name Mayank');
+      return;
+    }
+
+    snapshot.forEach(doc => {
+      console.log(doc.id, '=>', doc.data());
+    });
+  })
+  .catch(err => {
+    console.error('Error getting users:', err);
+  });
+This code performs the following steps:
+
+Initializes the Firestore client.
+References the "users" collection in the Firestore database.
+Defines a query that filters users based on their name being equal to "Mayank".
+Executes the query and retrieves the results.
+Logs the information of each user found with the name "Mayank".
+Make sure to replace 'users' with the actual name of your Firestore collection containing user data. This code assumes that the user documents have fields like 'name', 'uid', 'email', 'contact', and 'DOB'. Adjust the field names as per your Firestore document structure.
+
+
+
+
+
+
+UPDATE THE INFORMATION:
+To update the information of a user in Firestore based on their UID stored in the localStorage, you would first need to retrieve the UID from localStorage, then use it to identify the specific user document in Firestore. Once you have the document reference, you can update the information as needed. Here's how you can do it:
+// Assuming you have Firestore initialized as firestore
+
+// Get the UID from localStorage
+const uid = localStorage.getItem('uid');
+
+// Reference to the users collection
+const usersCollection = firestore.collection('users');
+
+// Reference to the specific user document using the UID
+const userDocRef = usersCollection.doc(uid);
+
+// Update the user document
+userDocRef.update({
+  // Update the fields you want to change
+  // Example: If you want to update the name and email
+  name: 'New Name',
+  email: 'newemail@example.com'
+})
+.then(() => {
+  console.log('User updated successfully');
+})
+.catch((error) => {
+  console.error('Error updating user:', error);
+});
+Replace 'users' with the actual name of your Firestore collection containing user data. This assumes that you have stored the UID of the user in the localStorage under the key 'uid'.
+
+Make sure to adjust the field names ('name', 'email', etc.) and their corresponding values according to your form or the updates you want to make to the user document.
+
+
+
+
+STORING:
+
+If you want to store the updated information in an array, you can first retrieve the existing user data, update it, and then store it back in Firestore. Here's how you can modify the previous example to achieve that:
+
+// Assuming you have Firestore initialized as firestore
+
+// Get the UID from localStorage
+const uid = localStorage.getItem('uid');
+
+// Reference to the users collection
+const usersCollection = firestore.collection('users');
+
+// Reference to the specific user document using the UID
+const userDocRef = usersCollection.doc(uid);
+
+// Update the user document
+userDocRef.get()
+  .then((doc) => {
+    if (doc.exists) {
+      // Get the existing user data
+      const userData = doc.data();
+
+      // Update the fields you want to change
+      // Example: If you want to update the name and email
+      userData.name = 'New Name';
+      userData.email = 'newemail@example.com';
+
+      // Store the updated data back in Firestore
+      userDocRef.update(userData)
+        .then(() => {
+          console.log('User updated successfully');
+        })
+        .catch((error) => {
+          console.error('Error updating user:', error);
+        });
+    } else {
+      console.error('User document does not exist');
+    }
+  })
+  .catch((error) => {
+    console.error('Error getting user document:', error);
+  });
+In this updated code:
+
+We first retrieve the existing user data using userDocRef.get().
+If the user document exists (doc.exists), we update the necessary fields in the userData object.
+We then use userDocRef.update(userData) to store the updated data back in Firestore.
+Make sure to adjust the field names ('name', 'email', etc.) and their corresponding values according to your form or the updates you want to make to the user document.
+
+
+
+
+

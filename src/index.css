@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body{
+  background-image: url('https://s3.envato.com/files/252563254/educartset.jpg');
+  background-position: center center;
+  background-size: cover; /* or contain */
+  background-repeat: no-repeat;
+  background-attachment: fixed; 
+}
+.inputShadow{
+  box-shadow: inset 4px 1px 8px 4px green;
+}
