@@ -71,7 +71,7 @@ const handleFileChange = (e) => {
   return (
     <Layout>
    
-        <div className=" flex justify-center items-center h-screen w-[300px] h-[340px] mt-4 border-opacity-60 shadow-md border bg-[#f9f9f964] rounded-xl">
+        <div className=" flex justify-center items-center w-[300px] h-[350px] mt-4 border-opacity-60 shadow-md border bg-[#f9f9f964] rounded-xl">
         <div className="mt-32 lg:mt-20 lg:mx-[30em]">
         <div className='mb-4 flex justify-center'>
                     <input 
