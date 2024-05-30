@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import {useState } from 'react'
 import MyContext from './myContext';
 import {toast} from 'react-hot-toast';
 
@@ -82,36 +82,6 @@ function MyState(props) {
         toast.success(noteData.success)
       }
 
-      const editNotesHandle = async (id) => {
-        const res = await fetch(`${import.meta.env.VITE_BACKEND_HOST_URL}/api/notes/updatenote/${id}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'auth-token': localStorage.getItem('token')
-          },
-          body: JSON.stringify({ title, description, tag })
-        });
-    
-        //* response
-        const noteData = await res.json();
-        // console.log(noteData)
-        getAllNotes();
-    
-        //* condition 
-        if (noteData.error) {
-          toast.error(noteData.error)
-          // console.log(noteData.error)
-        } else {
-          toast.success(noteData.success);
-          // console.log(noteData.success)
-        }
-    
-        //* after submit data all fields empty
-        setTitle("");
-        setDescription("");
-        setTag("");
-    
-      }
 
   return (
     <MyContext.Provider value={{  title, setTitle, description, 

@@ -11,7 +11,7 @@ const router = express.Router();
 router.post('/signup', async (req, res) => {
 
     //* data comimg from body(frontend)
-    const { name, email, password } = req.body
+    const { name, email, password ,image} = req.body
 
     try {
         //* Validation 
@@ -41,7 +41,8 @@ router.post('/signup', async (req, res) => {
         const newUser = await User({
             name,
             email,
-            password: hashedPassword
+            password: hashedPassword,
+            image
         });
         await newUser.save();
         console.log(newUser);
@@ -111,5 +112,30 @@ router.get('/getuser',fetchUser, async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 })
+
+router.put('/updateImage', fetchUser, async (req, res) => {
+    try {
+        const userId = req.userId;
+        const { image } = req.body;
+
+        //* Validation
+        if (!image) {
+            return res.status(400).json({ error: "Image is required" });
+        }
+
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        user.image = image;
+        await user.save();
+
+        res.status(200).json({ success: "Image updated successfully", user });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("Internal Server Error");
+    }
+});
 
 export default router

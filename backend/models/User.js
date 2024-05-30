@@ -18,6 +18,9 @@ const UserSchema = new Schema({
         type: Date,
         default: Date.now
     },
+    image:{
+     type:String
+    },
 })
 
 const User= model('user',UserSchema);

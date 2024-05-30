@@ -1,14 +1,15 @@
-import { useState } from 'react';
+import { useState,useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast';
-
+import pf from "./pf.gif";
 function Signup() {
 
     //* creating three useState
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    
+    const [image, setImage] = useState('');
+    const fileInputRef = useRef(null);
     //* navigate
     const navigate = useNavigate();
 
@@ -21,7 +22,7 @@ function Signup() {
             headers : {
                 'Content-Type': 'application/json',
             },
-            body : JSON.stringify({name,email,password})
+            body : JSON.stringify({name,email,password,image})
         });
 
         //* receiving response 
@@ -39,9 +40,25 @@ function Signup() {
         setName("");
         setEmail("");
         setPassword("");
-
+        setImage("");
     }
 
+    //converting to base64
+    const handleFileChange = (e) => {
+        const selectedFile = e.target.files[0];
+       
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setImage(reader.result);
+          //base64 encoded string
+        };
+        reader.readAsDataURL(selectedFile);
+        
+        reader.onerror= error=>{
+        console.log("ERROR :", error);
+        };
+      };
+   console.log("image",image);
     return (
         <div className=' flex justify-center items-center h-screen'>
 
@@ -55,6 +72,22 @@ function Signup() {
 
                 {/* Input 1 Name  */}
                 <div>
+                <div className='mb-4 flex justify-center'>
+                    <input 
+                        type="file" 
+                        accept="image/*"
+                        ref={fileInputRef}
+                        onChange={handleFileChange}
+                        style={{ display: "none" }}
+                    />
+                    <img 
+                        className="w-32 h-32 rounded-full object-cover cursor-pointer" 
+                        src={image || pf} 
+                        alt="Profile Preview" 
+                        onClick={() => fileInputRef.current.click()} 
+                    />
+                </div>
+                    
                     <input
                         value={name}
                         onChange={(e) => setName(e.target.value)}
